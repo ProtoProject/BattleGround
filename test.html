@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf8">
+    <script type="text/javascript" src="js/lib/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script>
+    <!--<script type="text/javascript" src="js/require.js"></script>-->
+    <title>ㅎㅎ</title>
+</head>
+<body>
+<!-- 캔버스 영역 s -->
+<div>
+    <canvas id="stage" />
+</div>
+<!-- 캔버스 영역 e -->
+
+<!-- 버튼 영역 s -->
+<div>
+    <button id="btn_createGame" type="button">게임생성</button>
+    <button id="btn_playGame" type="button">게임시작</button>
+    <button id="btn_continue" type="button">진행</button>
+</div>
+<!-- 버튼 영역 e -->
+
+<select id="skillMenu" onchange="changeEvent();">
+    <option value="123">전체</option>
+</select>
+</body>
+<script data-main="js/game" type="text/javascript" src="js/lib/require-jquery.js"></script>
+</html>

@@ -1,0 +1,9 @@
+{
+    "name":"spearman",
+    "frame" : {
+        "offsetX" : 60,
+        "offsetY" : 60,
+        "width":"60",
+        "height":"50"
+    }
+}

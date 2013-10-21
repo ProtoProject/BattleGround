@@ -1,0 +1,9 @@
+{
+    "name":"swordman",
+    "frame" : {
+        "offsetX" : 60,
+        "offsetY" : 115,
+        "width":"60",
+        "height":"50"
+    }
+}

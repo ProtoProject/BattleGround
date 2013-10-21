@@ -1,0 +1,9 @@
+{
+    "name":"warrior",
+    "frame" : {
+        "offsetX" : 50,
+        "offsetY" : 10,
+        "width":"50",
+        "height":"42"
+    }
+}
