@@ -7,7 +7,7 @@ define(['animation/sprites'],function(sprites){
       init : function(canvas, entry){
             // 캔버스 객체
             this.canvas = canvas;
-            this.ctx = canvas.getContext("2d");
+            this.context = canvas.getContext("2d");
             this.sprites = sprites;
             // 유닛컨테이너
             this.entry = entry;
@@ -18,13 +18,13 @@ define(['animation/sprites'],function(sprites){
       },
 
       draw : function(self, callback){
-            var canvas = self.ctx;
-            canvas.clearRect(0, 0, self.canvas.width, self.canvas.height);
+            var context = self.context;
+            context.clearRect(0, 0, self.canvas.width, self.canvas.height);
             var entryList = self.entry.entryList;
-            canvas.drawImage(self.background, 0, 0);
+            context.drawImage(self.background, 0, 0);
           _.each(entryList, function(entry){
                 // 배경 그리기
-                canvas.save();
+                context.save();
                 // 스프라이트 정보
                 var sprite = self.sprites[entry.unitName];
                 var offsetX = sprite.frame.offsetX;
@@ -37,34 +37,38 @@ define(['animation/sprites'],function(sprites){
                 var positionY = position.y;
 
                 if(entry.entryNum > 3){
-                    canvas.scale(-1, 1);
+                    context.scale(-1, 1);
                     positionX = -1 * positionX;
                 }
+                // 유닛그림자 그리기
+                self.drawEllipse(self, positionX + width/2, positionY + (height*1) - 5, width, 10);
 
-                // 유닛포지션
-                canvas.drawImage(self.spritesheet,
+                // 유닛그리기
+                context.drawImage(self.spritesheet,
                   offsetX, offsetY, width, height,
                   positionX, positionY,
                   width,height);
 
                 // 유닛 HP 표시
-                canvas.restore();
+                context.restore();
                 if(entry.entryNum > 3){
                     positionX = position.x - sprite.frame.width + 12;
                 }else{
                     positionX += 12;
                 }
 
-              self.drawHpBar(self, canvas, entry, positionX, positionY);
+                self.drawHpBar(self, entry, positionX, positionY);
+
             });
           //           callback();
       },
 
-      drawHpBar : function(self, canvas, entry, positionX, positionY){
+      drawHpBar : function(self, entry, positionX, positionY){
+          var context = self.context;
           var maxHp = entry.maxHp;
           var hp = entry.hp
-          canvas.font = "10px Arial";
-          canvas.fillText(entry.hp + '/' + entry.maxHp, positionX, positionY - 8);
+          context.font = "10px Arial";
+          context.fillText(entry.hp + '/' + entry.maxHp, positionX, positionY - 8);
 
           // hp bar box
           var barWidth = 30;
@@ -79,19 +83,40 @@ define(['animation/sprites'],function(sprites){
               barColor = "red";
           }
 
-          canvas.beginPath();
-          canvas.lineWidth = "0.5";
-          canvas.strokeStyle = barColor;
-          canvas.rect(positionX, positionY - 3, barWidth, 3);
-          canvas.stroke();
+          context.beginPath();
+          context.lineWidth = "0.5";
+          context.strokeStyle = barColor;
+          context.rect(positionX, positionY - 3, barWidth, 3);
+          context.stroke();
 
-          canvas.beginPath();
-          canvas.lineWidth = "1";
-          canvas.strokeStyle = barColor;
-          canvas.rect(positionX, positionY - 2, barWidth * hpRatio, 1);
-          canvas.stroke();
+          context.beginPath();
+          context.lineWidth = "1";
+          context.strokeStyle = barColor;
+          context.rect(positionX, positionY - 2, barWidth * hpRatio, 1);
+          context.stroke();
 
-      }
+      },
+
+      drawEllipse : function (self, centerX, centerY, width, height) {
+        var context = self.context;
+        context.beginPath();
+
+        context.moveTo(centerX, centerY - height/2);
+
+        context.bezierCurveTo(
+            centerX + width/2, centerY - height/2,
+            centerX + width/2, centerY + height/2,
+            centerX, centerY + height/2);
+
+        context.bezierCurveTo(
+            centerX - width/2, centerY + height/2,
+            centerX - width/2, centerY - height/2,
+            centerX, centerY - height/2);
+
+        context.fillStyle = "black";
+        context.fill();
+        context.closePath();
+    }
 
 
    });
