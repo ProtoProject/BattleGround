@@ -52,6 +52,11 @@ function createPlayer(player){
      *  게임 생성
      */
     function createGame(){
+        if(GameConfigure.gamePlayer1 != null || GameConfigure.gamePlayer2 != null){
+            alert("게임이 생성되어있습니다.");
+            return;
+        }
+
         // 플레이어 생성
         var player = createPlayer(Card.player1); // 임시 플레이어 생성
         GameConfigure.gamePlayer1 = player;
@@ -225,11 +230,12 @@ function createPlayer(player){
             }
         }
 //        Animation.attackTo(attackCard, defendCard, callback);
+        console.log("attackTo", Animation.attackTo);
         damage = attackCard.unitType.atk - defendCard.unitType.def;
 //        console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
         damage = damage <= 0 ? 1 : damage;
 //        defendCard.size -= damage;
-        defendCard.hp -= damage;
+        defendCard.hp = defendCard.hp < damage ? 0 : defendCard.hp - damage;
     }
 
     (function(){
