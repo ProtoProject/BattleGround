@@ -12,6 +12,7 @@ define([],function(){
         this.size = cardConf.size;
         this.unitType = cardConf.unitType;
         this.cardSpd = this.unitType.spd / this.size;
+        this.state = "";
     };
 
     var disp_Card = function(entryNum, player, cardConf){

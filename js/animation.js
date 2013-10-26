@@ -16,8 +16,8 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
         },
 
         attackTo : function(attacker, defender, callback){
-            this.entry.chageState(attacker.entryNum, 'attack');
-            this.entry.changState(defender.entryNum, 'defense');
+            this.entry.changeState(attacker.entryNum, 'attack');
+            this.entry.changeState(defender.entryNum, 'defense');
         },
 
         dying : function(target, callback){

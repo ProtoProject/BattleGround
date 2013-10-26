@@ -26,7 +26,7 @@ var GameConfigure = {
     p1Skill: null, // 스킬에는 스킬효과, 적용 턴 횟수, 대상...... 등이 있어야 할거 같음.
     p2Skill: null
 };
-
+var Animation_Entity;
 
 require(['jquery', 'card', 'animation', "lib/class", "lib/underscore.min"], function($, Card, Animation){
 /**
@@ -72,7 +72,8 @@ function createPlayer(player){
 
         console.log("units === ", units);
         // 모듈 생성/시작
-        new Animation(canvas , units).start();
+        Animation_Entity = new Animation(canvas , units);
+        Animation_Entity.start();
 
         if(GameConfigure.gamePlayer1 == null || GameConfigure.gamePlayer2 == null){
             alert("플레이어가 없습니다.");
@@ -94,6 +95,20 @@ function createPlayer(player){
         playBattle();
     }
 
+    /**
+     * 게임 재시작
+     */
+    function reStartGame(){
+        // TODO 임시
+        if(confirm("재시작 하시겠습니까?")){
+            console.log("========== 게임 RESTART =============");
+            GameConfigure.gamePlayer1 = null;
+            GameConfigure.gamePlayer2 = null;
+            createGame();
+            playBattle();
+        }
+    }
+
     function playBattle(){
         var p1Cards = GameConfigure.gamePlayer1.cardList;
         var p2Cards = GameConfigure.gamePlayer2.cardList;
@@ -107,14 +122,14 @@ function createPlayer(player){
             /**
              * TODO 장군컨트롤 추가
              */
+            var battelStack = createBattleStack(p1Cards, p2Cards);
+            cardBattle(battelStack);
             if(p1Cards.length <= 0){
                 alert("P2 WIN!!!");
             }
             else if(p2Cards.length <= 0){
                 alert("P1 WIN!!!");
             }
-            var battelStack = createBattleStack(p1Cards, p2Cards);
-            cardBattle(battelStack);
         });
 //        while(confirm("계속 하시겠습니까?")){
 ////        console.log(p1Cards.length, " // " , p2Cards.length);
@@ -229,8 +244,8 @@ function createPlayer(player){
                 console.log("finish");
             }
         }
-//        Animation.attackTo(attackCard, defendCard, callback);
-        console.log("attackTo", Animation.attackTo);
+        console.log("Animation_Entity", Animation_Entity);
+        Animation_Entity.attackTo(attackCard, defendCard, callback);
         damage = attackCard.unitType.atk - defendCard.unitType.def;
 //        console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
         damage = damage <= 0 ? 1 : damage;
@@ -241,11 +256,6 @@ function createPlayer(player){
     (function(){
         $("#btn_createGame").click(createGame);
         $("#btn_playGame").click(playGame);
+        $("#btn_reStartGame").click(reStartGame);
     })();
-//    createGame();
-//    playGame();
-//    return {
-//        createGame : createGame,
-//        playGame : playGame
-//    }
 });
