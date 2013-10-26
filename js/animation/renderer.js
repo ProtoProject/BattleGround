@@ -72,7 +72,7 @@ define(['animation/sprites'],function(sprites){
           var barColor = "green";
           var hpRatio = hp/maxHp;
 
-          if(hpRatio < 0.7){
+          if(hpRatio < 0.7 && hpRatio > 0.4){
               barColor = "yellow";
           }
           else if(hpRatio < 0.4){
