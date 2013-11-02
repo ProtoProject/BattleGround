@@ -1,9 +1,8 @@
 {
-    "name":"spearman",
-    "frame" : {
-        "offsetX" : 60,
-        "offsetY" : 60,
-        "width":"60",
-        "height":"50"
-    }
+    "name": "spearman",
+    "frame": {"x":93,"y":2,"w":43,"h":54},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":43,"h":54},
+    "sourceSize": {"w":43,"h":54}
 }

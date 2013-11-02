@@ -1,9 +1,8 @@
 {
-    "name":"swordman",
-    "frame" : {
-        "offsetX" : 60,
-        "offsetY" : 115,
-        "width":"60",
-        "height":"47"
-    }
+    "name": "swordman",
+    "frame": {"x":45,"y":2,"w":46,"h":52},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":46,"h":52},
+    "sourceSize": {"w":46,"h":52}
 }

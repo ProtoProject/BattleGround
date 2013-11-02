@@ -12,7 +12,7 @@ define(['animation/sprites'],function(sprites){
             // 유닛컨테이너
             this.entry = entry;
             this.spritesheet = new Image();
-            this.spritesheet.src = "img/Character.png";
+            this.spritesheet.src = "img/units.png";
             this.background = new Image();
             this.background.src = "img/Background.jpg";
             this.effect = new Image();
@@ -39,10 +39,10 @@ define(['animation/sprites'],function(sprites){
                 context.save();
                 // 스프라이트 정보
                 var sprite = self.sprites[entry.unitName];
-                var offsetX = sprite.frame.offsetX;
-                var offsetY = sprite.frame.offsetY;
-                var width = sprite.frame.width;
-                var height = sprite.frame.height;
+                var offsetX = sprite.frame.x;
+                var offsetY = sprite.frame.y;
+                var width = sprite.frame.w;
+                var height = sprite.frame.h;
 
                 var position = self.entry.entryPosition(entry.entryNum);
                 var positionX = position.x;
@@ -64,7 +64,7 @@ define(['animation/sprites'],function(sprites){
                 // 유닛 HP 표시
                 context.restore();
                 if(entry.entryNum > 3){
-                    positionX = position.x - sprite.frame.width + 12;
+                    positionX = position.x - sprite.frame.w + 12;
                 }else{
                     positionX += 12;
                 }
