@@ -15,15 +15,27 @@ define(['animation/sprites'],function(sprites){
             this.spritesheet.src = "img/Character.png";
             this.background = new Image();
             this.background.src = "img/Background.jpg";
+            this.effect = new Image();
+            this.effect.src = "img/attacksprite.png";
       },
 
-      draw : function(self, callback){
+       /**
+        * 게임 화면그리기
+        *
+        * @param self
+        * @param callback
+        */
+      draw : function(self){
+           if(self.effectOff == undefined){
+               self.effectOff = 0;
+           }
             var context = self.context;
+            // 배경 그리기
             context.clearRect(0, 0, self.canvas.width, self.canvas.height);
             var entryList = self.entry.entryList;
             context.drawImage(self.background, 0, 0);
+
           _.each(entryList, function(entry){
-                // 배경 그리기
                 context.save();
                 // 스프라이트 정보
                 var sprite = self.sprites[entry.unitName];
@@ -59,10 +71,26 @@ define(['animation/sprites'],function(sprites){
 
                 self.drawHpBar(self, entry, positionX, positionY);
 
+                // check callback
+
             });
+                if(self.effectOff > 3){
+                    self.effectOff = 0;
+                }
+
+                context.drawImage(self.effect, 2 + (self.effectOff * 296) , 2, 296, 287, 100, 100, 100, 100);
+                self.effectOff++;
           //           callback();
       },
 
+       /**
+        * 유닛 hp바 그리기
+        *
+        * @param self
+        * @param entry
+        * @param positionX
+        * @param positionY
+        */
       drawHpBar : function(self, entry, positionX, positionY){
           var context = self.context;
           var maxHp = entry.maxHp;
@@ -97,6 +125,15 @@ define(['animation/sprites'],function(sprites){
 
       },
 
+       /**
+        * 타원그리기
+        *
+        * @param self
+        * @param centerX
+        * @param centerY
+        * @param width
+        * @param height
+        */
       drawEllipse : function (self, centerX, centerY, width, height) {
         var context = self.context;
         context.beginPath();
@@ -116,9 +153,28 @@ define(['animation/sprites'],function(sprites){
         context.fillStyle = "black";
         context.fill();
         context.closePath();
-    }
+       },
 
+       /**
+        * 메세지 팝업
+        *
+        * @param msg
+        * @param time
+        * @param fontSize
+        * @param posX
+        */
+       popupMessage : function (msg, time, fontSize, posX){
+           this.context.font = "10px Arial";
+           this.context.fillText(msg, positionX, positionY - 8);
+       },
 
+       setCallback : function (callback){
+            this.callbackTrigger = {callback:callback, fired:false};
+       },
+
+       drawAttack : function(){
+
+       }
    });
 
     return renderer;

@@ -5,7 +5,7 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
 
     var animation = Class.extend({
         init : function(canvas, units){
-            this.fps = '13';
+            this.fps = '10';
             this.entry = new Entry(units);
             this.renderer = new Renderer(canvas, this.entry);
         },
@@ -15,9 +15,14 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
             window.setInterval(function(){self.renderer.draw(self.renderer)}, 1000/this.fps);
         },
 
+        showStartMessage : function(){
+            this.renderer.popupMessage("Start Game", 1000, 50, 100);
+        },
+
         attackTo : function(attacker, defender, callback){
             this.entry.changeState(attacker.entryNum, 'attack');
             this.entry.changeState(defender.entryNum, 'defense');
+            this.renderer.setCallback(callback);
         },
 
         dying : function(target, callback){

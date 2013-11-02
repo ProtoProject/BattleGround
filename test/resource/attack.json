@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "attack1.psd",
+	"frame": {"x":2,"y":2,"w":296,"h":287},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":296,"h":287},
+	"sourceSize": {"w":296,"h":287}
+},
+{
+	"filename": "attack2.psd",
+	"frame": {"x":300,"y":2,"w":296,"h":287},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":296,"h":287},
+	"sourceSize": {"w":296,"h":287}
+},
+{
+	"filename": "attack3.psd",
+	"frame": {"x":598,"y":2,"w":296,"h":287},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":296,"h":287},
+	"sourceSize": {"w":296,"h":287}
+},
+{
+	"filename": "attack4.psd",
+	"frame": {"x":896,"y":2,"w":296,"h":287},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":296,"h":287},
+	"sourceSize": {"w":296,"h":287}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
+	"image": "attacksprite.png",
+	"format": "RGBA8888",
+	"size": {"w":1200,"h":291},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:4ee9a93d094975f324f6613d61a3a062:1/1$"
+}
+}

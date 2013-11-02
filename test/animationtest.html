@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>animation module test</title>
+    <script type="text/javascript" src="../js/lib/require-jquery.js"></script>
+    <script type="text/javascript">
+    var Animation;
+    var swordman1 = {};
+    swordman1.hp = 10;
+    swordman1.maxHp = 10;
+    swordman1.unitName = "swordman";
+    swordman1.entryNum = 1;
+
+    var spearman2 = {};
+    spearman2.hp = 10;
+    spearman2.maxHp = 10;
+    spearman2.unitName = "spearman";
+    spearman2.entryNum = 4;
+
+    require.config({
+       baseUrl: '../js'
+    });
+
+    require(['animation', 'lib/class','lib/underscore.min'], function(Animation){
+        var canvas = document.getElementById('stage');
+        canvas.setAttribute('width', 600);
+        canvas.setAttribute('height', 400);
+        // 모듈 생성/시작
+        Animation = new Animation(canvas, [swordman1, spearman2]);
+        Animation.start();
+    });
+
+    </script>
+</head>
+<body>
+    <canvas id="stage" >
+        Your browser does not support HTML5 canvas.
+    </canvas>
+
+    <input type="button" onclick="Animation.attackTo(swordman1, spearman2, function(){alert('Attack Done!')});" value="attack spearman" />
+</body>
+</html>
