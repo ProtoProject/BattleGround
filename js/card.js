@@ -39,15 +39,91 @@ define([],function(){
         general : {
             name : "장군",
             skill : {
-                lockOn : function(target){
-                    console.log(target);
+                lockOn : {
+                    name : "집중공격",
+                    effect : function(target){
+                        console.log("lockOn");
+                        console.log(target);
+                        // TODO 임시
+                        GameConfigure.gamePlayer1.cardList[0].hp += 1000;
+                    }
+                },
+                skill2 : {
+                    name : "skill2",
+                    effect : function(target){
+                        console.log("skill2");
+                        console.log(target);
+                    }
+                },
+                skill3 : {
+                    name : "skill3",
+                    effect : function(target){
+                        console.log("lockOn");
+                        console.log(target);
+                    }
                 }
             }
         },
-        strategist : {name : "전략가"},
-        tricker : {name : "모사가"}
+        strategist : {
+            name : "전략가",
+            skill : {
+                skill1 : {
+                    name : "skill1",
+                    effect : function(target){
+                        console.log("skill1");
+                        console.log(target);
+                    }
+                },
+                skill2 : {
+                    name : "skill2",
+                    effect : function(target){
+                        console.log("skill2");
+                        console.log(target);
+                    }
+                },
+                skill3 : {
+                    name : "skill3",
+                    effect : function(target){
+                        console.log("skill3");
+                        console.log(target);
+                    }
+                }
+            }
+        },
+        tricker : {
+            name : "모사가",
+            skill : {
+                skill1 : {
+                    name : "skill1",
+                    effect : function(target){
+                        console.log("skill1");
+                        console.log(target);
+                    }
+                },
+                skill2 : {
+                    name : "skill2",
+                    effect : function(target){
+                        console.log("skill2");
+                        console.log(target);
+                    }
+                },
+                skill3 : {
+                    name : "skill3",
+                    effect : function(target){
+                        console.log("skill3");
+                        console.log(target);
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * 카드 생성
+     * @param player
+     * @param cardConfList
+     * @returns {Array}
+     */
     function createCard(player, cardConfList){
         var cardList = [];
         for(var i in cardConfList){
