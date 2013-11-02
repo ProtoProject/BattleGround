@@ -23,7 +23,7 @@ var GameConfigure = {
             return this.gamePlayer1;
         }
     },
-    p1Skill: null, // 스킬에는 스킬효과, 적용 턴 횟수, 대상...... 등이 있어야 할거 같음.
+    p1Skill: null, // 플레이어1이 사용한 스킬. 스킬에는 스킬효과, 적용 턴 횟수, 대상...... 등이 있어야 할거 같음.
     p2Skill: null
 };
 var Animation_Entity;
@@ -79,11 +79,46 @@ function createPlayer(player){
             alert("플레이어가 없습니다.");
             return;
         }
+        setSkillList();
         console.log("=========== 게임생성 ============");
         console.log(GameConfigure);
     }
 
 // createField() // 맵만들기(맵설정)
+
+
+    function setSkillList(){
+        //
+        p1_skillList = GameConfigure.gamePlayer1.hero.skill;
+        p2_skillList = GameConfigure.gamePlayer2.hero.skill;
+        console.log("setSkillList");
+        console.log(p1_skillList, p2_skillList);
+        var $sel_p1Skill = $("#p1_skillMenu");
+        var $sel_p2Skill = $("#p2_skillMenu");
+        for(var i in p1_skillList){
+            if(p1_skillList.hasOwnProperty(i)){
+                var skill = p1_skillList[i];
+                $sel_p1Skill.append("<option value='" + i + "'>" + skill.name + "</option>");
+            }
+        }
+        $sel_p1Skill.change(function(){
+            var selectedSkill = $(this).val();
+            p1_skillList[selectedSkill].effect();
+            GameConfigure.p1Skill = p1_skillList[selectedSkill].effect;
+        });
+
+        for(i in p2_skillList){
+            if(p2_skillList.hasOwnProperty(i)){
+                var skill = p2_skillList[i];
+                $sel_p2Skill.append("<option value='" + i + "'>" + skill.name + "</option>");
+            }
+        }
+        $sel_p2Skill.change(function(){
+            var selectedSkill = $(this).val();
+            p2_skillList[selectedSkill].effect();
+            GameConfigure.p2Skill = p2_skillList[selectedSkill].effect;
+        });
+    }
 
     /**
      * 게임 시작
@@ -102,6 +137,8 @@ function createPlayer(player){
         // TODO 임시
         if(confirm("재시작 하시겠습니까?")){
             console.log("========== 게임 RESTART =============");
+            $("#stage").remove();
+            $("#gameFiled").append("<canvas id='stage' />");
             GameConfigure.gamePlayer1 = null;
             GameConfigure.gamePlayer2 = null;
             createGame();
