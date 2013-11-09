@@ -4,10 +4,9 @@
 define(['animation/sprites'],function(sprites){
 
    var renderer = Class.extend({
-      init : function(entityCanvas, effectCanvas, entry){
+      init : function(entityCanvas, entry){
             // 캔버스 객체
             this.entityCanvas = entityCanvas;
-            this.effectCanvas = effectCanvas;
             this.sprites = sprites;
             // 유닛컨테이너
             this.entry = entry;
@@ -15,8 +14,6 @@ define(['animation/sprites'],function(sprites){
             this.spritesheet.src = "img/units.png";
             this.background = new Image();
             this.background.src = "img/Background.jpg";
-            this.effect = new Image();
-            this.effect.src = "img/attacksprite.png";
       },
 
        /**
@@ -25,7 +22,7 @@ define(['animation/sprites'],function(sprites){
         * @param self
         * @param callback
         */
-      draw : function(self){
+      update : function(self){
            if(self.effectOff == undefined){
                self.effectOff = 0;
            }
@@ -55,6 +52,13 @@ define(['animation/sprites'],function(sprites){
                     var adjustNum = Math.floor(Math.random()*5);
                     adjustNum *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
                     positionX = positionX + adjustNum;
+                }
+                else if(entry.state == 'attack'){
+                    if(entry.entryNum > 3){
+                        positionX -= 15;
+                    }else {
+                        positionX += 15;
+                    }
                 }
 
                 if(entry.entryNum > 3){

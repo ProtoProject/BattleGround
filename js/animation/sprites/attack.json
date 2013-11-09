@@ -3,7 +3,7 @@
     "row":1,
     "frame": {"x":2,"y":2,"w":296,"h":287},
     "meta":{
-        "image": "img/attacksprite.png",
+        "image": "img/effects.png",
         "format": "RGBA8888",
         "size": {"w":1200,"h":291},
         "scale": "1"

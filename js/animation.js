@@ -1,18 +1,29 @@
 /**
  * Created by vaslife on 13. 10. 12..
  */
-define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sprite, Entry, Renderer){
+define(
+    [   'animation/sprites',
+        'animation/entry',
+        'animation/renderer',
+        'animation/effector'],
+    function(Sprite, Entry, Renderer, Effector){
 
     var animation = Class.extend({
-        init : function(entityCanvas,  units){
+        init : function(entityCanvas, effectCanvas, units){
             this.fps = '10';
             this.entry = new Entry(units);
-            this.renderer = new Renderer(entityCanvas, null, this.entry);
+            this.renderer = new Renderer(entityCanvas, this.entry);
+            this.effector = Effector;
+            this.effector.init(effectCanvas);
         },
 
         start : function(){
             var self = this;
-            window.setInterval(function(){self.renderer.draw(self.renderer)}, 1000/this.fps);
+            window.setInterval(
+                function(){
+                    self.renderer.update(self.renderer);
+                    self.effector.update();
+                }, 1000/this.fps);
         },
 
         showStartMessage : function(){
@@ -20,11 +31,9 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
         },
 
         attackTo : function(attacker, defender, callback){
-            //this.entry.changeState(attacker.entryNum, 'attack');
-            //this.entry.changeState(defender.entryNum, 'attacked');
             setTimeout(callback, 1000);
-            //this.renderer.setCallback(callback);
         },
+
         drawDone : function(){
 
         },

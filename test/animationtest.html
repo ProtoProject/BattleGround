@@ -2,6 +2,18 @@
 <html>
 <head>
     <title>animation module test</title>
+    <style>
+    .canvasArea {
+        position: relative;
+        width: 600px;
+        height: 400px;
+    }
+    canvas { position:absolute;image-rendering:optimizeSpeed;}
+    .buttons {
+        position: absolute;
+    }
+    </style>
+
     <script type="text/javascript" src="../js/lib/require-jquery.js"></script>
     <script type="text/javascript">
     var animation;
@@ -33,21 +45,36 @@
         effectCanvas.setAttribute('height', 400);
 
         // 모듈 생성/시작
-        animation = new Animation(entityCanvas, [swordman1, spearman2]);
+        animation = new Animation(entityCanvas, effectCanvas, [swordman1, spearman2]);
         animation.start();
     });
 
+
+    function testAttack(){
+        swordman1.state = 'attack';
+        spearman2.state = 'attacked';
+        animation.attackTo(swordman1, spearman2,
+                    function(){
+                            swordman1.state = 'idle',
+                            spearman2.state = 'idle';
+                            alert('Attack Done!')
+                    });
+    }
     </script>
 </head>
 <body>
-    <canvas id="entity" style="z-index: 100">
-        Your browser does not support HTML5 canvas.
-    </canvas>
-    <canvas id="effect" style="z-index: 200;display: none">
+    <div class="canvasArea">
+        <canvas id="entity" style="z-index: 100">
+            Your browser does not support HTML5 canvas.
+        </canvas>
+        <canvas id="effect" style="z-index: 200;">
+        </canvas>
+    </div>
 
-    </canvas>
 
-    <input type="button" onclick="animation.attackTo(swordman1, spearman2, function(){spearman2.state = 'idle';alert('Attack Done!')});" value="attack spearman" />
+    <div class="buttons">
+    <input type="button" onclick="testAttack();" value="attack spearman" />
     <input type="button" onclick="animation.drawTitle('It\'s Title Test!!');" value="show title" />
+    </div>
 </body>
 </html>
