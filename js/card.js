@@ -31,9 +31,9 @@ define([],function(){
     };
 
     UnitType = {
-        swordman : {name : "swordman", atk : 50, def : 40, cost : 10, spd : 1, agr : 50},
-        spearman : {name : "spearman", atk : 30, def : 30, cost : 15, spd : 3, agr : 10},
-        warrior : {name : "warrior", atk : 60, def : 60, cost : 20, spd : 2, agr : 70}
+        swordman : {name : "swordman", atk : 80, def : 40, cost : 10, spd : 1, agr : 50},
+        spearman : {name : "spearman", atk : 60, def : 30, cost : 15, spd : 3, agr : 10},
+        warrior : {name : "warrior", atk : 90, def : 60, cost : 20, spd : 2, agr : 70}
     };
 
     Hero = {
