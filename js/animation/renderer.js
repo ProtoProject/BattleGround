@@ -55,15 +55,18 @@ define(['animation/sprites'],function(sprites){
                     var adjustNum = Math.floor(Math.random()*5);
                     adjustNum *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
                     positionX = positionX + adjustNum;
-
                 }
 
                 if(entry.entryNum > 3){
                     context.scale(-1, 1);
                     positionX = -1 * positionX;
                 }
-                // 유닛그림자 그리기
-                self.drawEllipse(self, positionX + width/2, positionY + (height*1) - 5, width, 10);
+
+                if(entry.state != 'die'){
+                    // 유닛그림자 그리기
+                    self.drawEllipse(self, positionX + width/2, positionY + (height*1) - 5, width, 10);
+                }
+
 
                 // 유닛그리기
                 context.drawImage(self.spritesheet,
@@ -71,15 +74,17 @@ define(['animation/sprites'],function(sprites){
                   positionX, positionY,
                   width,height);
 
-                // 유닛 HP 표시
-                context.restore();
-                if(entry.entryNum > 3){
-                    positionX = position.x - sprite.frame.w + 12;
-                }else{
-                    positionX += 12;
-                }
+                if(entry.state != 'die'){
+                    // 유닛 HP 표시
+                    context.restore();
+                    if(entry.entryNum > 3){
+                        positionX = position.x - frame.w + 12;
+                    }else{
+                        positionX += 12;
+                    }
 
-                self.drawHpBar(self, entry, positionX, positionY);
+                    self.drawHpBar(self, entry, positionX, positionY);
+                }
 
                 // check callback
 
