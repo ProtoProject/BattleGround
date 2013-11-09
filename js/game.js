@@ -310,6 +310,7 @@ function createPlayer(player){
             attack(attackCard, defendCard);
             if(defendCard.hp <= 0){
                 //console.log("defendCard : " + defendCard, "DIE!!!!");
+                defendCard.state = "die";
                 defender.cardList.splice(parseInt(defendCardidx),1);
                 if(defender.cardList.length <= 0){
                     return;

@@ -25,11 +25,6 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
             setTimeout(callback, 1000);
             //this.renderer.setCallback(callback);
         },
-
-        dying : function(target, callback){
-            this.entry.chageState(target.entryNum, 'dying');
-        },
-
         drawDone : function(){
 
         },

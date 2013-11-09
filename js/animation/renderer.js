@@ -50,7 +50,7 @@ define(['animation/sprites'],function(sprites){
                 var positionY = position.y;
 
 
-                console.log(entry.state );
+                console.log('card Number: ' + entry.entryNum + ', state :' + entry.state );
                 if(entry.state == 'attacked'){
                     var adjustNum = Math.floor(Math.random()*5);
                     adjustNum *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
