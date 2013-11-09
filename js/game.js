@@ -23,9 +23,94 @@ var GameConfigure = {
             return this.gamePlayer1;
         }
     },
+    ActiveSkillList : [],
     p1Skill: null, // 플레이어1이 사용한 스킬. 스킬에는 스킬효과, 적용 턴 횟수, 대상...... 등이 있어야 할거 같음.
     p2Skill: null
 };
+
+/**
+ * 스킬사용
+ * 1. 여러턴에 걸처서 효과가 유지 가능해야함.
+ * 2. 유효턴이 지나면 원복되야함.
+ * 3. 매턴마다 스킬을 사용할 수 있으므로 게임턴이 진행될때는 여러스킬의 효과가 중첩될 수 있음.
+ * 4.
+ */
+var GameSkillHandler = function(){
+    //console.log("GameConfigure.ActiveSkillList", GameConfigure.ActiveSkillList);
+    for(var i in GameConfigure.ActiveSkillList){
+        if(GameConfigure.ActiveSkillList.hasOwnProperty(i)){
+            var activeSkill = GameConfigure.ActiveSkillList[i];
+
+            if(!activeSkill.getSkill()) continue;
+
+            //console.log("누가쓴 스킬?", activeSkill.getOwner.name);
+            // TODO 유효턴 동안 반복사용 여부 구현
+            if(activeSkill.getTurn() > 0){
+                activeSkill.useSkill();
+            }
+            else{
+                activeSkill.revertState();
+                activeSkill.clear();
+            }
+        }
+    }
+};
+
+/**
+ * 스킬 사용을 위한 객체
+ * @param player
+ * @returns {{getTurn: Function, getSkill: Function, setSkill: Function, getTurn: Function, getOwner: Function, clear: Function, useSkill: Function, revertState: Function}}
+ */
+var skillFunc = function(player){
+    var owner = player;
+    var skillName = null;
+    var skillTurn = 0;
+    var skillObj = null;
+    var rollbackObj = null;
+//    var isUsePerTurn = true;
+    var oldValue = 0;
+    return {
+        getTurn : function(){
+            return skillTurn;
+        },
+        getSkill : function(){
+            return skillObj;
+        },
+        setSkill : function(heroSkill){
+            skillName = heroSkill.name;
+            skillTurn = heroSkill.turn;
+            skillObj = heroSkill.effect;
+            rollbackObj = heroSkill.rollback;
+            oldValue = heroSkill.init();
+        },
+        getTurn : function(){
+            return skillTurn;
+        },
+        getOwner : function(){
+            return owner;
+        },
+        clear : function(){
+            skillTurn = 0;
+            skillObj = null;
+        },
+        useSkill : function(){
+            skillObj(this);
+            skillTurn--;
+        },
+        revertState : function(){
+            if(rollbackObj){
+                rollbackObj(oldValue);
+            }
+        }
+//        getOldValue : function(){
+//            return oldValue;
+//        },
+//        setOldValue : function(val){
+//            oldValue = val;
+//        }
+    }
+};
+
 var Animation_Entity;
 
 require(['jquery', 'card', 'animation', "lib/class", "lib/underscore.min"], function($, Card, Animation){
@@ -70,7 +155,7 @@ function createPlayer(player){
 
         units = GameConfigure.gamePlayer1.cardList.concat(GameConfigure.gamePlayer2.cardList);
 
-        console.log("units === ", units);
+        //console.log("units === ", units);
         // 모듈 생성/시작
         Animation_Entity = new Animation(canvas , units);
         Animation_Entity.start();
@@ -80,19 +165,23 @@ function createPlayer(player){
             return;
         }
         setSkillList();
-        console.log("=========== 게임생성 ============");
-        console.log(GameConfigure);
+        //console.log("=========== 게임생성 ============");
+        //console.log(GameConfigure);
     }
 
 // createField() // 맵만들기(맵설정)
-
 
     function setSkillList(){
         //
         p1_skillList = GameConfigure.gamePlayer1.hero.skill;
         p2_skillList = GameConfigure.gamePlayer2.hero.skill;
-        console.log("setSkillList");
-        console.log(p1_skillList, p2_skillList);
+        var sk1 = new skillFunc(GameConfigure.gamePlayer1);
+//        sk1.setSkill({name : "A", turn: 3, effect : null});
+        var sk2 = new skillFunc(GameConfigure.gamePlayer2);
+//        sk1.setSkill({name : "B", turn: 6, effect : null});
+        //console.log(">>>>>>SKILLFUNCTION<<<<<<<<", sk1, sk2);
+        //console.log("setSkillList");
+        //console.log(p1_skillList, p2_skillList);
         var $sel_p1Skill = $("#p1_skillMenu");
         var $sel_p2Skill = $("#p2_skillMenu");
         for(var i in p1_skillList){
@@ -103,8 +192,10 @@ function createPlayer(player){
         }
         $sel_p1Skill.change(function(){
             var selectedSkill = $(this).val();
-            p1_skillList[selectedSkill].effect();
-            GameConfigure.p1Skill = p1_skillList[selectedSkill].effect;
+//            p1_skillList[selectedSkill].effect();
+//            GameConfigure.p1Skill = p1_skillList[selectedSkill].effect;
+            sk1.setSkill(p1_skillList[selectedSkill]);
+            GameConfigure.ActiveSkillList.push(sk1);
         });
 
         for(i in p2_skillList){
@@ -115,8 +206,10 @@ function createPlayer(player){
         }
         $sel_p2Skill.change(function(){
             var selectedSkill = $(this).val();
-            p2_skillList[selectedSkill].effect();
-            GameConfigure.p2Skill = p2_skillList[selectedSkill].effect;
+//            p2_skillList[selectedSkill].effect();
+//            GameConfigure.p2Skill = p2_skillList[selectedSkill].effect;
+            sk2.setSkill(p2_skillList[selectedSkill]);
+            GameConfigure.ActiveSkillList.push(sk2);
         });
     }
 
@@ -125,8 +218,8 @@ function createPlayer(player){
      */
     function playGame(){
         console.log("========== 게임시작 =============");
-//    console.log("플레이어1", GameConfigure.gamePlayer1);
-//    console.log("플레이어2", GameConfigure.gamePlayer2);
+//    //console.log("플레이어1", GameConfigure.gamePlayer1);
+//    //console.log("플레이어2", GameConfigure.gamePlayer2);
         playBattle();
     }
 
@@ -136,7 +229,7 @@ function createPlayer(player){
     function reStartGame(){
         // TODO 임시
         if(confirm("재시작 하시겠습니까?")){
-            console.log("========== 게임 RESTART =============");
+            //console.log("========== 게임 RESTART =============");
             $("#stage").remove();
             $("#gameFiled").append("<canvas id='stage' />");
             GameConfigure.gamePlayer1 = null;
@@ -151,14 +244,15 @@ function createPlayer(player){
         var p2Cards = GameConfigure.gamePlayer2.cardList;
 
 //        var battelStack = createBattleStack(p1Cards, p2Cards);
-//    console.log(p1Cards);
-//    console.log(p2Cards);
+//    //console.log(p1Cards);
+//    //console.log(p2Cards);
 //    while(p1Cards.length > 0 || p2Cards.length > 0){
         $("#btn_continue").click(function(){
-            console.log(p1Cards.length, " // " , p2Cards.length);
+            //console.log(p1Cards.length, " // " , p2Cards.length);
             /**
              * TODO 장군컨트롤 추가
              */
+            GameSkillHandler();
             var battelStack = createBattleStack(p1Cards, p2Cards);
             cardBattle(battelStack);
             if(p1Cards.length <= 0){
@@ -168,22 +262,6 @@ function createPlayer(player){
                 alert("P1 WIN!!!");
             }
         });
-//        while(confirm("계속 하시겠습니까?")){
-////        console.log(p1Cards.length, " // " , p2Cards.length);
-//            /**
-//             * TODO 장군컨트롤 추가
-//             */
-//            if(p1Cards.length <= 0){
-//                alert("P2 WIN!!!");
-//                break;
-//            }
-//            else if(p2Cards.length <= 0){
-//                alert("P1 WIN!!!");
-//                break;
-//            }
-//            var battelStack = createBattleStack(p1Cards, p2Cards);
-//            cardBattle(battelStack);
-//        }
     }
 
     /**
@@ -209,35 +287,35 @@ function createPlayer(player){
         var defendCard;
         var defender;
         var damage;
-        console.log(stack);
+        //console.log(stack);
         while(stack.length > 0){
             attackCard = stack.pop();
             if(attackCard.hp <= 0){
-                console.log(attackCard.user.name, "'s Card ", attackCard, "Die!!!!!");
+                //console.log(attackCard.user.name, "'s Card ", attackCard, "Die!!!!!");
                 continue;
             }
             attacker = attackCard.user;
             defender = GameConfigure.getOpposite(attacker);
-//        console.log("length : ", defender.cardList.length);
+//        //console.log("length : ", defender.cardList.length);
             defendCardidx = selectTargetCard(defender.cardList);
             defendCard = defender.cardList[defendCardidx];
-//        console.log(attackCard, " ===> ", defendCard);
-            console.log("name : ", attacker.name, "attackCard : ", attackCard, " ===> defender : ", defendCard.user.name, "defendCard : ", defendCard);
+//        //console.log(attackCard, " ===> ", defendCard);
+            //console.log("name : ", attacker.name, "attackCard : ", attackCard, " ===> defender : ", defendCard.user.name, "defendCard : ", defendCard);
             /**
              damage = attackCard.unitType.atk - defendCard.unitType.def;
-             //        console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
+             //        //console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
              damage = damage <= 0 ? 1 : damage;
              defendCard.size -= damage;
              */
             attack(attackCard, defendCard);
             if(defendCard.hp <= 0){
-                console.log("defendCard : " + defendCard, "DIE!!!!");
+                //console.log("defendCard : " + defendCard, "DIE!!!!");
                 defender.cardList.splice(parseInt(defendCardidx),1);
                 if(defender.cardList.length <= 0){
                     return;
                 }
             }
-//        console.log(GameConfigure.gamePlayer1.cardList.length, GameConfigure.gamePlayer2.cardList.length);
+//        //console.log(GameConfigure.gamePlayer1.cardList.length, GameConfigure.gamePlayer2.cardList.length);
         }
     }
 
@@ -250,19 +328,19 @@ function createPlayer(player){
     function selectTargetCard(cardList){
         var index = 0;
         var aggroVal = 0;
-        console.log("===============>", cardList);
+        //console.log("===============>", cardList);
         for(var i in cardList){
             if(cardList.hasOwnProperty(i)){
                 var card = cardList[i];
                 var cardAggro = Math.floor(Math.random() * (100 - card.unitType.agr + 1)) + card.unitType.agr;
-//            console.log(i, "==>", "init : ", Card.unitType.agr, " // result : ", cardAggro);
+//            //console.log(i, "==>", "init : ", Card.unitType.agr, " // result : ", cardAggro);
                 if(aggroVal < cardAggro){
                     aggroVal = cardAggro;
                     index = i;
                 }
             }
         }
-//    console.log("selectTargetCard : ", cardList[index], aggroVal);
+//    //console.log("selectTargetCard : ", cardList[index], aggroVal);
 //    return cardList[index];
         return index;
     }
@@ -278,17 +356,23 @@ function createPlayer(player){
         // TODO Animation객체
         var callback = {
             finish : function(){
-                console.log("finish");
+                //console.log("finish");
             }
         }
-        console.log("Animation_Entity", Animation_Entity);
+        //console.log("Animation_Entity", Animation_Entity);
+        attackCard.state = "attack";
+        defendCard.state = "attacked";
+        var callback = function(){
+            attackCard.state = "idle";
+            defendCard.state = "idle";
+        };
         Animation_Entity.attackTo(attackCard, defendCard, callback);
         damage = attackCard.unitType.atk - defendCard.unitType.def;
-//        console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
+//        //console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
         damage = damage <= 0 ? 1 : damage;
 //        defendCard.size -= damage;
         defendCard.hp = defendCard.hp < damage ? 0 : defendCard.hp - damage;
-    }
+    };
 
     (function(){
         $("#btn_createGame").click(createGame);

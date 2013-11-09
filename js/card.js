@@ -22,6 +22,7 @@ define([],function(){
         this.unitName = cardConf.unitType.name;
         this.hp = cardConf.size;
         this.maxHp = cardConf.size;
+        this.state = "idle",
         // logic을 위한 속성
         this.user = player;
         this.size = cardConf.size;
@@ -30,9 +31,9 @@ define([],function(){
     };
 
     UnitType = {
-        swordman : {name : "swordman", atk : 100, def : 40, cost : 10, spd : 1, agr : 50},
-        spearman : {name : "spearman", atk : 70, def : 30, cost : 15, spd : 3, agr : 10},
-        warrior : {name : "warrior", atk : 130, def : 60, cost : 20, spd : 2, agr : 70}
+        swordman : {name : "swordman", atk : 50, def : 40, cost : 10, spd : 1, agr : 50},
+        spearman : {name : "spearman", atk : 30, def : 30, cost : 15, spd : 3, agr : 10},
+        warrior : {name : "warrior", atk : 60, def : 60, cost : 20, spd : 2, agr : 70}
     };
 
     Hero = {
@@ -41,18 +42,24 @@ define([],function(){
             skill : {
                 lockOn : {
                     name : "집중공격",
+                    turn : 3,
+                    init : function(){
+                        return GameConfigure.gamePlayer1.cardList[0].maxHp;
+                    },
                     effect : function(target){
                         console.log("lockOn");
-                        console.log(target);
-                        // TODO 임시
-                        GameConfigure.gamePlayer1.cardList[0].hp += 1000;
+                        GameConfigure.gamePlayer1.cardList[0].maxHp = 9999;
+                    },
+                    rollback : function(oldValue){
+                        GameConfigure.gamePlayer1.cardList[0].maxHp = oldValue;
                     }
                 },
                 skill2 : {
-                    name : "skill2",
+                    name : "으헤헤헤",
+                    turn : 2,
+                    init : function(){
+                    },
                     effect : function(target){
-                        console.log("skill2");
-                        console.log(target);
                     }
                 },
                 skill3 : {
