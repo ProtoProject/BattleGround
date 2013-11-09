@@ -264,42 +264,6 @@ function createPlayer(player){
         });
     }
 
-    function cardBattle2(stack){
-        console.log("cardStack", stack);
-        var attackCard;
-        var attacker;
-        var defendCardidx;
-        var defendCard;
-        var defender;
-
-        attackCard = stack.pop();
-        if(!attackCard || attackCard.hp <= 0) return;
-
-        // 카드 설정
-        attacker = attackCard.user;
-        defender = GameConfigure.getOpposite(attacker);
-        defendCardidx = selectTargetCard(defender.cardList);
-        defendCard = defender.cardList[defendCardidx];
-        attack(attackCard, defendCard);
-
-        attackCard.state = "attack";
-        defendCard.state = "attacked";
-        Animation_Entity.attackTo(attackCard, defendCard, function(){
-            attackCard.state = "idle";
-            defendCard.state = "idle";
-
-            if(defendCard.hp <= 0){
-                console.log("defendCard : " + defendCard, "DIE!!!!");
-                defendCard.state = "die";
-                defender.cardList.splice(parseInt(defendCardidx),1);
-                if(defender.cardList.length <= 0){
-                    return;
-                }
-            }
-            cardBattle2(stack);
-        });
-    }
-
     /**
      * 전투를 위한 카드 순서 생성
      * @param p1Cards
@@ -314,6 +278,51 @@ function createPlayer(player){
         });
 
         return battleStack;
+    }
+
+    function cardBattle(stack){
+        var attackCard;
+        var attacker;
+        var defendCardidx;
+        var defendCard;
+        var defender;
+        var damage;
+        //console.log(stack);
+        while(stack.length > 0){
+            attackCard = stack.pop();
+            if(attackCard.hp <= 0){
+                //console.log(attackCard.user.name, "'s Card ", attackCard, "Die!!!!!");
+                continue;
+            }
+            attacker = attackCard.user;
+            defender = GameConfigure.getOpposite(attacker);
+//        //console.log("length : ", defender.cardList.length);
+            defendCardidx = selectTargetCard(defender.cardList);
+            defendCard = defender.cardList[defendCardidx];
+//        //console.log(attackCard, " ===> ", defendCard);
+            //console.log("name : ", attacker.name, "attackCard : ", attackCard, " ===> defender : ", defendCard.user.name, "defendCard : ", defendCard);
+            /**
+             damage = attackCard.unitType.atk - defendCard.unitType.def;
+             //        //console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
+             damage = damage <= 0 ? 1 : damage;
+             defendCard.size -= damage;
+             */
+            Animation_Entity.attackTo(attackCard, defendCard, function(){
+                attack(attackCard, defendCard, defendCardidx);
+            });
+//        while(GameConfigure.TurnState != "idle"){
+//            // do nothing
+//        }
+//            if(defendCard.hp <= 0){
+//                //console.log("defendCard : " + defendCard, "DIE!!!!");
+//                defendCard.state = "die";
+//                defender.cardList.splice(parseInt(defendCardidx),1);
+//                if(defender.cardList.length <= 0){
+//                    return;
+//                }
+//            }
+//        //console.log(GameConfigure.gamePlayer1.cardList.length, GameConfigure.gamePlayer2.cardList.length);
+        }
     }
 
     /**
@@ -362,4 +371,53 @@ function createPlayer(player){
         $("#btn_playGame").click(playGame);
         $("#btn_reStartGame").click(reStartGame);
     })();
+
+    //=============== TEST =======================
+    //=============== TEST =======================
+    function cardBattle2(stack){
+        console.log("cardStack", stack);
+        var attackCard;
+        var attacker;
+        var defendCardidx;
+        var defendCard;
+        var defender;
+
+        attackCard = stack.pop();
+        if(!attackCard || attackCard.hp <= 0) return;
+
+        // 카드 설정
+        attacker = attackCard.user;
+        defender = GameConfigure.getOpposite(attacker);
+        defendCardidx = selectTargetCard(defender.cardList);
+        defendCard = defender.cardList[defendCardidx];
+        attack(attackCard, defendCard);
+
+//        if(defendCard.hp <= 0){
+//            console.log("defendCard : " + defendCard, "DIE!!!!");
+//            defendCard.state = "die";
+//            defender.cardList.splice(parseInt(defendCardidx),1);
+//            if(defender.cardList.length <= 0){
+//                return;
+//            }
+//        }
+
+        attackCard.state = "attack";
+        defendCard.state = "attacked";
+        Animation_Entity.attackTo(attackCard, defendCard, function(){
+            attackCard.state = "idle";
+            defendCard.state = "idle";
+
+            if(defendCard.hp <= 0){
+                console.log("defendCard : " + defendCard, "DIE!!!!");
+                defendCard.state = "die";
+                defender.cardList.splice(parseInt(defendCardidx),1);
+                if(defender.cardList.length <= 0){
+                    return;
+                }
+            }
+            cardBattle2(stack);
+        });
+    }
+    //=============== TEST =======================
+    //=============== TEST =======================
 });
