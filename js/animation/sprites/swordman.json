@@ -1,6 +1,10 @@
 {
     "name": "swordman",
-    "frame": {"x":45,"y":2,"w":46,"h":52},
+    "frame": {
+        "idle" : {"x":167,"y":2,"w":46,"h":52},
+        "attack" : {"x":167,"y":2,"w":46,"h":52},
+        "attacked":{"x":215,"y":2,"w":46,"h":53}
+    },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": {"x":0,"y":0,"w":46,"h":52},

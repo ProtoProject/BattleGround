@@ -4,39 +4,50 @@
     <title>animation module test</title>
     <script type="text/javascript" src="../js/lib/require-jquery.js"></script>
     <script type="text/javascript">
-    var Animation;
+    var animation;
     var swordman1 = {};
     swordman1.hp = 10;
     swordman1.maxHp = 10;
     swordman1.unitName = "assasin";
     swordman1.entryNum = 1;
+    swordman1.state = "idle";
 
     var spearman2 = {};
     spearman2.hp = 10;
     spearman2.maxHp = 10;
     spearman2.unitName = "spearman";
     spearman2.entryNum = 4;
+    spearman2.state = "idle";
 
     require.config({
        baseUrl: '../js'
     });
 
     require(['animation', 'lib/class','lib/underscore.min'], function(Animation){
-        var canvas = document.getElementById('stage');
-        canvas.setAttribute('width', 600);
-        canvas.setAttribute('height', 400);
+        var entityCanvas = document.getElementById('entity');
+        entityCanvas.setAttribute('width', 600);
+        entityCanvas.setAttribute('height', 400);
+
+        var effectCanvas = document.getElementById('effect');
+        effectCanvas.setAttribute('width', 600);
+        effectCanvas.setAttribute('height', 400);
+
         // 모듈 생성/시작
-        Animation = new Animation(canvas, [swordman1, spearman2]);
-        Animation.start();
+        animation = new Animation(entityCanvas, [swordman1, spearman2]);
+        animation.start();
     });
 
     </script>
 </head>
 <body>
-    <canvas id="stage" >
+    <canvas id="entity" style="z-index: 100">
         Your browser does not support HTML5 canvas.
     </canvas>
+    <canvas id="effect" style="z-index: 200;display: none">
 
-    <input type="button" onclick="Animation.attackTo(swordman1, spearman2, function(){alert('Attack Done!')});" value="attack spearman" />
+    </canvas>
+
+    <input type="button" onclick="animation.attackTo(swordman1, spearman2, function(){spearman2.state = 'idle';alert('Attack Done!')});" value="attack spearman" />
+    <input type="button" onclick="animation.drawTitle('It\'s Title Test!!');" value="show title" />
 </body>
 </html>

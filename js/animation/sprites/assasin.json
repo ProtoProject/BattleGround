@@ -1,6 +1,10 @@
 {
     "name": "assasin",
-    "frame": {"x":2,"y":2,"w":41,"h":42},
+    "frame": {
+        "idle" : {"x":354,"y":2,"w":41,"h":42},
+        "attack" : {"x":354,"y":2,"w":41,"h":42},
+        "attacked" : {"x":397,"y":2,"w":41,"h":42}
+    },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},

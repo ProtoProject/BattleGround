@@ -4,10 +4,10 @@
 define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sprite, Entry, Renderer){
 
     var animation = Class.extend({
-        init : function(canvas, units){
+        init : function(entityCanvas,  units){
             this.fps = '10';
             this.entry = new Entry(units);
-            this.renderer = new Renderer(canvas, this.entry);
+            this.renderer = new Renderer(entityCanvas, null, this.entry);
         },
 
         start : function(){
@@ -20,9 +20,10 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
         },
 
         attackTo : function(attacker, defender, callback){
-            this.entry.changeState(attacker.entryNum, 'attack');
-            this.entry.changeState(defender.entryNum, 'defense');
-            this.renderer.setCallback(callback);
+            //this.entry.changeState(attacker.entryNum, 'attack');
+            //this.entry.changeState(defender.entryNum, 'attacked');
+            setTimeout(callback, 1000);
+            //this.renderer.setCallback(callback);
         },
 
         dying : function(target, callback){
@@ -31,6 +32,15 @@ define(['animation/sprites','animation/entry', 'animation/renderer'],function(Sp
 
         drawDone : function(){
 
+        },
+
+        drawTitle: function(text) {
+            var x = 300,
+                y = 150,
+                strokeSize = 1,
+                color = '#990066',
+                strokeColor = 'red';
+            this.renderer.drawText(text, x, y, 40, true, strokeSize, color, strokeColor);
         }
     })
 

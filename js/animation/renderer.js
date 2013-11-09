@@ -4,10 +4,10 @@
 define(['animation/sprites'],function(sprites){
 
    var renderer = Class.extend({
-      init : function(canvas, entry){
+      init : function(entityCanvas, effectCanvas, entry){
             // 캔버스 객체
-            this.canvas = canvas;
-            this.context = canvas.getContext("2d");
+            this.entityCanvas = entityCanvas;
+            this.effectCanvas = effectCanvas;
             this.sprites = sprites;
             // 유닛컨테이너
             this.entry = entry;
@@ -29,9 +29,9 @@ define(['animation/sprites'],function(sprites){
            if(self.effectOff == undefined){
                self.effectOff = 0;
            }
-            var context = self.context;
+            var context = self.entityCanvas.getContext('2d');
             // 배경 그리기
-            context.clearRect(0, 0, self.canvas.width, self.canvas.height);
+            context.clearRect(0, 0, self.entityCanvas.width, self.entityCanvas.height);
             var entryList = self.entry.entryList;
             context.drawImage(self.background, 0, 0);
 
@@ -39,14 +39,19 @@ define(['animation/sprites'],function(sprites){
                 context.save();
                 // 스프라이트 정보
                 var sprite = self.sprites[entry.unitName];
-                var offsetX = sprite.frame.x;
-                var offsetY = sprite.frame.y;
-                var width = sprite.frame.w;
-                var height = sprite.frame.h;
+                var frame = sprite.frame[entry.state];
+                var offsetX = frame.x;
+                var offsetY = frame.y;
+                var width = frame.w;
+                var height = frame.h;
 
                 var position = self.entry.entryPosition(entry.entryNum);
                 var positionX = position.x;
                 var positionY = position.y;
+
+                if(entry.state == 'attacked'){
+                   // positionX = positionX +
+                }
 
                 if(entry.entryNum > 3){
                     context.scale(-1, 1);
@@ -74,12 +79,6 @@ define(['animation/sprites'],function(sprites){
                 // check callback
 
             });
-                if(self.effectOff > 3){
-                    self.effectOff = 0;
-                }
-
-                context.drawImage(self.effect, 2 + (self.effectOff * 296) , 2, 296, 287, 100, 100, 100, 100);
-                self.effectOff++;
           //           callback();
       },
 
@@ -92,7 +91,7 @@ define(['animation/sprites'],function(sprites){
         * @param positionY
         */
       drawHpBar : function(self, entry, positionX, positionY){
-          var context = self.context;
+          var context =self.entityCanvas.getContext('2d');
           var maxHp = entry.maxHp;
           var hp = entry.hp
           context.font = "10px Arial";
@@ -135,7 +134,7 @@ define(['animation/sprites'],function(sprites){
         * @param height
         */
       drawEllipse : function (self, centerX, centerY, width, height) {
-        var context = self.context;
+        var context = self.entityCanvas.getContext('2d');
         context.beginPath();
 
         context.moveTo(centerX, centerY - height/2);
@@ -155,25 +154,29 @@ define(['animation/sprites'],function(sprites){
         context.closePath();
        },
 
-       /**
-        * 메세지 팝업
-        *
-        * @param msg
-        * @param time
-        * @param fontSize
-        * @param posX
-        */
-       popupMessage : function (msg, time, fontSize, posX){
-           this.context.font = "10px Arial";
-           this.context.fillText(msg, positionX, positionY - 8);
-       },
-
        setCallback : function (callback){
             this.callbackTrigger = {callback:callback, fired:false};
        },
 
        drawAttack : function(){
 
+       },
+
+       drawText : function(text, x, y, size, centered, strokeSize, color, strokeColor){
+           var ctx = this.context;
+           if(text && x && y) {
+               ctx.save();
+               if(centered) {
+                   ctx.textAlign = "center";
+               }
+               ctx.font = 'italic '+size+'pt Calibri';
+               ctx.strokeStyle = strokeColor || "#373737";
+               ctx.lineWidth = strokeSize;
+               ctx.strokeText(text, x, y);
+               ctx.fillStyle = color || "white";
+               ctx.fillText(text, x, y);
+               ctx.restore();
+           }
        }
    });
 
