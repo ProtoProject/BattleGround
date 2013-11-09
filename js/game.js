@@ -149,15 +149,19 @@ function createPlayer(player){
         GameConfigure.gamePlayer2 = player;
 
         // canvas 객체
-        var canvas = document.getElementById('stage');
-        canvas.setAttribute('width', 600);
-        canvas.setAttribute('height', 400);
+        var entityCanvas = document.getElementById('entity');
+        entityCanvas.setAttribute('width', 600);
+        entityCanvas.setAttribute('height', 400);
+
+        var effectCanvas = document.getElementById('effect');
+        effectCanvas.setAttribute('width', 600);
+        effectCanvas.setAttribute('height', 400);
 
         units = GameConfigure.gamePlayer1.cardList.concat(GameConfigure.gamePlayer2.cardList);
 
         //console.log("units === ", units);
         // 모듈 생성/시작
-        Animation_Entity = new Animation(canvas , units);
+        Animation_Entity = new Animation(entityCanvas, effectCanvas, units);
         Animation_Entity.start();
 
         if(GameConfigure.gamePlayer1 == null || GameConfigure.gamePlayer2 == null){
@@ -280,51 +284,6 @@ function createPlayer(player){
         return battleStack;
     }
 
-    function cardBattle(stack){
-        var attackCard;
-        var attacker;
-        var defendCardidx;
-        var defendCard;
-        var defender;
-        var damage;
-        //console.log(stack);
-        while(stack.length > 0){
-            attackCard = stack.pop();
-            if(attackCard.hp <= 0){
-                //console.log(attackCard.user.name, "'s Card ", attackCard, "Die!!!!!");
-                continue;
-            }
-            attacker = attackCard.user;
-            defender = GameConfigure.getOpposite(attacker);
-//        //console.log("length : ", defender.cardList.length);
-            defendCardidx = selectTargetCard(defender.cardList);
-            defendCard = defender.cardList[defendCardidx];
-//        //console.log(attackCard, " ===> ", defendCard);
-            //console.log("name : ", attacker.name, "attackCard : ", attackCard, " ===> defender : ", defendCard.user.name, "defendCard : ", defendCard);
-            /**
-             damage = attackCard.unitType.atk - defendCard.unitType.def;
-             //        //console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
-             damage = damage <= 0 ? 1 : damage;
-             defendCard.size -= damage;
-             */
-            Animation_Entity.attackTo(attackCard, defendCard, function(){
-                attack(attackCard, defendCard, defendCardidx);
-            });
-//        while(GameConfigure.TurnState != "idle"){
-//            // do nothing
-//        }
-//            if(defendCard.hp <= 0){
-//                //console.log("defendCard : " + defendCard, "DIE!!!!");
-//                defendCard.state = "die";
-//                defender.cardList.splice(parseInt(defendCardidx),1);
-//                if(defender.cardList.length <= 0){
-//                    return;
-//                }
-//            }
-//        //console.log(GameConfigure.gamePlayer1.cardList.length, GameConfigure.gamePlayer2.cardList.length);
-        }
-    }
-
     /**
      * 각 card의 arg값을 최소치로 rand를 돌린다.
      *
@@ -338,6 +297,7 @@ function createPlayer(player){
         for(var i in cardList){
             if(cardList.hasOwnProperty(i)){
                 var card = cardList[i];
+                if(card.state == "die") continue;
                 var cardAggro = Math.floor(Math.random() * (100 - card.unitType.agr + 1)) + card.unitType.agr;
 //            //console.log(i, "==>", "init : ", Card.unitType.agr, " // result : ", cardAggro);
                 if(aggroVal < cardAggro){
@@ -410,10 +370,10 @@ function createPlayer(player){
             if(defendCard.hp <= 0){
                 console.log("defendCard : " + defendCard, "DIE!!!!");
                 defendCard.state = "die";
-                defender.cardList.splice(parseInt(defendCardidx),1);
-                if(defender.cardList.length <= 0){
-                    return;
-                }
+//                defender.cardList.splice(parseInt(defendCardidx),1);
+//                if(defender.cardList.length <= 0){
+//                    return;
+//                }
             }
 
             var l1 = GameConfigure.gamePlayer1.cardList;
