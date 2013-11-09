@@ -415,6 +415,15 @@ function createPlayer(player){
                     return;
                 }
             }
+
+            var l1 = GameConfigure.gamePlayer1.cardList;
+            var l2 = GameConfigure.gamePlayer2.cardList;
+            for(var i =0;i<l1.length;i++){
+                console.log(l1[i].entryNum, l1[i].state);
+            }
+            for(var i =0;i<l2.length;i++){
+                console.log(l2[i].entryNum, l2[i].state);
+            }
             cardBattle2(stack);
         });
     }
