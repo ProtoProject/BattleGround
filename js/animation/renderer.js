@@ -49,8 +49,13 @@ define(['animation/sprites'],function(sprites){
                 var positionX = position.x;
                 var positionY = position.y;
 
+
+                console.log(entry.state );
                 if(entry.state == 'attacked'){
-                   // positionX = positionX +
+                    var adjustNum = Math.floor(Math.random()*5);
+                    adjustNum *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+                    positionX = positionX + adjustNum;
+
                 }
 
                 if(entry.entryNum > 3){
