@@ -35,8 +35,19 @@ define(['animation/sprites'],function(sprites){
           _.each(entryList, function(entry){
                 context.save();
                 // 스프라이트 정보
-                var sprite = self.sprites[entry.unitName];
-                var frame = sprite.frame[entry.state];
+                var unitsprites = self.sprites['unitsprites'];
+                var frameName = entry.unitName;
+                if(entry.state != 'die'){
+                    if(entry.state == 'attacked'){
+                        frameName += '-attacked';
+                    }
+                    if(entry.entryNum > 3){
+                        frameName += '-mirror';
+                    }
+                }else{
+                    frameName = 'tombstone';
+                }
+                var frame = unitsprites.frames[frameName].frame;
                 var offsetX = frame.x;
                 var offsetY = frame.y;
                 var width = frame.w;
@@ -61,16 +72,10 @@ define(['animation/sprites'],function(sprites){
                     }
                 }
 
-                if(entry.entryNum > 3){
-                    context.scale(-1, 1);
-                    positionX = -1 * positionX;
-                }
-
                 if(entry.state != 'die'){
                     // 유닛그림자 그리기
                     self.drawEllipse(self, positionX + width/2, positionY + (height*1) - 5, width, 10);
                 }
-
 
                 // 유닛그리기
                 context.drawImage(self.spritesheet,
@@ -80,13 +85,7 @@ define(['animation/sprites'],function(sprites){
 
                 if(entry.state != 'die'){
                     // 유닛 HP 표시
-                    context.restore();
-                    if(entry.entryNum > 3){
-                        positionX = position.x - frame.w + 12;
-                    }else{
-                        positionX += 12;
-                    }
-
+                    positionX += 12;
                     self.drawHpBar(self, entry, positionX, positionY);
                 }
 
