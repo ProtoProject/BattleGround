@@ -22,20 +22,17 @@ define(['animation/sprites'],function(sprites){
         * @param self
         * @param callback
         */
-      update : function(self){
-           if(self.effectOff == undefined){
-               self.effectOff = 0;
-           }
-            var context = self.entityCanvas.getContext('2d');
+      update : function(){
+            var context = this.entityCanvas.getContext('2d');
             // 배경 그리기
-            context.clearRect(0, 0, self.entityCanvas.width, self.entityCanvas.height);
-            var entryList = self.entry.entryList;
-            context.drawImage(self.background, 0, 0);
-
+            context.clearRect(0, 0, this.entityCanvas.width, this.entityCanvas.height);
+            var entryList = this.entry.entryList;
+            context.drawImage(this.background, 0, 0);
+          var that = this;
           _.each(entryList, function(entry){
                 context.save();
                 // 스프라이트 정보
-                var unitsprites = self.sprites['unitsprites'];
+                var unitsprites = that.sprites['unitsprites'];
                 var frameName = entry.unitName;
                 if(entry.state != 'die'){
                     if(entry.state == 'attacked'){
@@ -53,7 +50,7 @@ define(['animation/sprites'],function(sprites){
                 var width = frame.w;
                 var height = frame.h;
 
-                var position = self.entry.entryPosition(entry.entryNum);
+                var position = that.entry.entryPosition(entry.entryNum);
                 var positionX = position.x;
                 var positionY = position.y;
 
@@ -74,11 +71,11 @@ define(['animation/sprites'],function(sprites){
 
                 if(entry.state != 'die'){
                     // 유닛그림자 그리기
-                    self.drawEllipse(self, positionX + width/2, positionY + (height*1) - 5, width, 10);
+                    that.drawEllipse(positionX + width/2, positionY + (height*1) - 5, width, 10);
                 }
 
                 // 유닛그리기
-                context.drawImage(self.spritesheet,
+                context.drawImage(that.spritesheet,
                   offsetX, offsetY, width, height,
                   positionX, positionY,
                   width,height);
@@ -86,7 +83,7 @@ define(['animation/sprites'],function(sprites){
                 if(entry.state != 'die'){
                     // 유닛 HP 표시
                     positionX += 12;
-                    self.drawHpBar(self, entry, positionX, positionY);
+                    that.drawHpBar(entry, positionX, positionY);
                 }
 
                 // check callback
@@ -103,8 +100,8 @@ define(['animation/sprites'],function(sprites){
         * @param positionX
         * @param positionY
         */
-      drawHpBar : function(self, entry, positionX, positionY){
-          var context =self.entityCanvas.getContext('2d');
+      drawHpBar : function(entry, positionX, positionY){
+          var context =this.entityCanvas.getContext('2d');
           var maxHp = entry.maxHp;
           var hp = entry.hp
           context.font = "10px Arial";
@@ -146,8 +143,8 @@ define(['animation/sprites'],function(sprites){
         * @param width
         * @param height
         */
-      drawEllipse : function (self, centerX, centerY, width, height) {
-        var context = self.entityCanvas.getContext('2d');
+      drawEllipse : function (centerX, centerY, width, height) {
+        var context = this.entityCanvas.getContext('2d');
         context.beginPath();
 
         context.moveTo(centerX, centerY - height/2);

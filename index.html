@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .canvasArea {
+            position: relative;
+            width: 600px;
+            height: 400px;
+        }
+        canvas { position:absolute;}
+        .buttons {
+            position: absolute;
+        }
+    </style>
+    <meta http-equiv="Content-type" content="text/html; charset=utf8">
+    <script type="text/javascript" src="js/lib/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script>
+    <!--<script type="text/javascript" src="js/require.js"></script>-->
+    <title>BattleGround</title>
+</head>
+<body>
+<!-- 캔버스 영역 s -->
+<div id="gameFiled" class="canvasArea">
+    <canvas id="entity" style="z-index: 100">
+        Your browser does not support HTML5 canvas.
+    </canvas>
+    <canvas id="effect" style="z-index: 200;">
+    </canvas>
+</div>
+<!-- 캔버스 영역 e -->
+
+<!-- 버튼 영역 s -->
+<div class="buttons">
+    <button id="btn_createGame" type="button">게임생성</button>
+    <button id="btn_playGame" type="button">게임시작</button>
+    <button id="btn_continue" type="button">진행</button>
+    <button id="btn_reStartGame" type="button" disabled="disabled">게임 재시작</button>
+    <div>
+        플레이어1 영웅 Skill
+    <select id="p1_skillMenu">
+        <option>선택하세요.</option>
+    </select>
+    </div>
+    <div>
+        플레이어2 영웅 Skill
+    <select id="p2_skillMenu">
+        <option>선택하세요.</option>
+    </select>
+    </div>
+</div>
+<!-- 버튼 영역 e -->
+</body>
+<script data-main="js/game" type="text/javascript" src="js/lib/require-jquery.js"></script>
+</html>

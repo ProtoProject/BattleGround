@@ -18,12 +18,9 @@ define(
         },
 
         start : function(){
-            var self = this;
             window.setInterval(
-                function(){
-                    self.renderer.update(self.renderer);
-                    self.effector.update();
-                }, 1000/this.fps);
+                this.renderer.update.bind(this.renderer)
+                , 1000/this.fps);
         },
 
         showStartMessage : function(){
