@@ -234,8 +234,13 @@ function createPlayer(player){
         // TODO 임시
         if(confirm("재시작 하시겠습니까?")){
             //console.log("========== 게임 RESTART =============");
-            $("#stage").remove();
-            $("#gameFiled").append("<canvas id='stage' />");
+            $("#entity").remove();
+            $("#effect").remove();
+            $("#gameFiled").append('<canvas id="entity" style="z-index: 100">' +
+                '   Your browser does not support HTML5 canvas.' +
+                '</canvas>' +
+                '   <canvas id="effect" style="z-index: 200;">' +
+                '</canvas>');
             GameConfigure.gamePlayer1 = null;
             GameConfigure.gamePlayer2 = null;
             createGame();
@@ -247,26 +252,14 @@ function createPlayer(player){
         var p1Cards = GameConfigure.gamePlayer1.cardList;
         var p2Cards = GameConfigure.gamePlayer2.cardList;
 
-//        var battelStack = createBattleStack(p1Cards, p2Cards);
-//    //console.log(p1Cards);
-//    //console.log(p2Cards);
 //    while(p1Cards.length > 0 || p2Cards.length > 0){
         $("#btn_continue").click(function(){
-            //console.log(p1Cards.length, " // " , p2Cards.length);
             /**
              * TODO 장군컨트롤 추가
              */
 //            GameSkillHandler();
             var battelStack = createBattleStack(p1Cards, p2Cards);
             cardBattle2(battelStack);
-//            if(p1Cards.length <= 0){
-//                alert("P2 WIN!!!");
-//                return;
-//            }
-//            else if(p2Cards.length <= 0){
-//                alert("P1 WIN!!!");
-//                return;
-//            }
         });
     }
 
@@ -302,15 +295,12 @@ function createPlayer(player){
                 var card = cardList[i];
                 if(card.state == "die") continue;
                 var cardAggro = Math.floor(Math.random() * (100 - card.unitType.agr + 1)) + card.unitType.agr;
-//            //console.log(i, "==>", "init : ", Card.unitType.agr, " // result : ", cardAggro);
                 if(aggroVal < cardAggro){
                     aggroVal = cardAggro;
                     index = i;
                 }
             }
         }
-//    //console.log("selectTargetCard : ", cardList[index], aggroVal);
-//    return cardList[index];
         return index;
     }
 
@@ -321,11 +311,8 @@ function createPlayer(player){
      * @param factor
      */
     function attack(attackCard, defendCard, factor){
-        //console.log("Animation_Entity", Animation_Entity);
         damage = attackCard.unitType.atk - defendCard.unitType.def;
-//        //console.log("attack : ", attackCard.unitType.atk * attackCard.size, "defend : ", defendCard.unitType.def * defendCard.size, "damage : " + damage);
         damage = damage <= 0 ? 1 : damage;
-//        defendCard.size -= damage;
         defendCard.hp = defendCard.hp < damage ? 0 : defendCard.hp - damage;
     };
 
@@ -335,8 +322,6 @@ function createPlayer(player){
         $("#btn_reStartGame").click(reStartGame);
     })();
 
-    //=============== TEST =======================
-    //=============== TEST =======================
     function cardBattle2(stack){
 //        console.log("cardStack", stack);
         var attackCard;
@@ -345,8 +330,6 @@ function createPlayer(player){
         var defendCard;
         var defender;
 
-//        attackCard = stack.pop();
-//        if(!attackCard || attackCard.hp <= 0) return;
         attackCard = null;
         while(!attackCard){
             attackCard = stack.pop();
@@ -363,15 +346,6 @@ function createPlayer(player){
         defendCard = defender.cardList[defendCardidx];
         attack(attackCard, defendCard);
 
-//        if(defendCard.hp <= 0){
-//            console.log("defendCard : " + defendCard, "DIE!!!!");
-//            defendCard.state = "die";
-//            defender.cardList.splice(parseInt(defendCardidx),1);
-//            if(defender.cardList.length <= 0){
-//                return;
-//            }
-//        }
-
         attackCard.state = "attack";
         defendCard.state = "attacked";
         Animation_Entity.attackTo(makeCardObjForAnimation(attackCard), makeCardObjForAnimation(defendCard), function(){
@@ -382,9 +356,7 @@ function createPlayer(player){
                 console.log("defendCard : " + defendCard, "DIE!!!!");
                 defendCard.state = "die";
                 defender.cardList.splice(parseInt(defendCardidx),1);
-//                if(defender.cardList.length <= 0){
-//                    return;
-//                }
+
                 if(GameConfigure.gamePlayer1.cardList.length <= 0){
                     alert("P2 WIN!!!");
                     $("#btn_continue").attr("disabled", "disabled");
@@ -396,15 +368,6 @@ function createPlayer(player){
                     return;
                 }
             }
-
-            var l1 = GameConfigure.gamePlayer1.cardList;
-            var l2 = GameConfigure.gamePlayer2.cardList;
-//            for(var i =0;i<l1.length;i++){
-//                console.log(l1[i].entryNum, l1[i].state);
-//            }
-//            for(var i =0;i<l2.length;i++){
-//                console.log(l2[i].entryNum, l2[i].state);
-//            }
             cardBattle2(stack);
         });
     };
@@ -425,6 +388,4 @@ function createPlayer(player){
             }
         }
     }
-    //=============== TEST =======================
-    //=============== TEST =======================
 });
