@@ -345,8 +345,16 @@ function createPlayer(player){
         var defendCard;
         var defender;
 
-        attackCard = stack.pop();
-        if(!attackCard || attackCard.hp <= 0) return;
+//        attackCard = stack.pop();
+//        if(!attackCard || attackCard.hp <= 0) return;
+        attackCard = null;
+        while(!attackCard){
+            attackCard = stack.pop();
+            if(!attackCard) return;
+            if(attackCard.hp <= 0){
+                attackCard = null;
+            }
+        }
 
         // 카드 설정
         attacker = attackCard.user;
@@ -366,7 +374,7 @@ function createPlayer(player){
 
         attackCard.state = "attack";
         defendCard.state = "attacked";
-        Animation_Entity.attackTo(attackCard, defendCard, function(){
+        Animation_Entity.attackTo(makeCardObjForAnimation(attackCard), makeCardObjForAnimation(defendCard), function(){
             attackCard.state = "idle";
             defendCard.state = "idle";
 
@@ -399,6 +407,23 @@ function createPlayer(player){
 //            }
             cardBattle2(stack);
         });
+    };
+
+    function makeCardObjForAnimation(cardObj){
+        return {
+            getEntryNum : function(){
+                return cardObj.entryNum;
+            },
+            getState : function(){
+                return cardObj.state;
+            },
+            getHP : function(){
+                return cardObj.hp;
+            },
+            getMaxHP : function(){
+                return cardObj.maxHp;
+            }
+        }
     }
     //=============== TEST =======================
     //=============== TEST =======================
