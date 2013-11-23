@@ -256,15 +256,17 @@ function createPlayer(player){
             /**
              * TODO 장군컨트롤 추가
              */
-            GameSkillHandler();
+//            GameSkillHandler();
             var battelStack = createBattleStack(p1Cards, p2Cards);
             cardBattle2(battelStack);
-            if(p1Cards.length <= 0){
-                alert("P2 WIN!!!");
-            }
-            else if(p2Cards.length <= 0){
-                alert("P1 WIN!!!");
-            }
+//            if(p1Cards.length <= 0){
+//                alert("P2 WIN!!!");
+//                return;
+//            }
+//            else if(p2Cards.length <= 0){
+//                alert("P1 WIN!!!");
+//                return;
+//            }
         });
     }
 
@@ -276,6 +278,7 @@ function createPlayer(player){
      */
     function createBattleStack(p1Cards, p2Cards){
         var battleStack = p1Cards.concat(p2Cards);
+        // 유닛의 스피드로 정렬
         // 스피드 = 유닛 spd / 유닛수
         battleStack.sort(function(card1, card2){
             return card1.cardSpd - card2.cardSpd;
@@ -335,7 +338,7 @@ function createPlayer(player){
     //=============== TEST =======================
     //=============== TEST =======================
     function cardBattle2(stack){
-        console.log("cardStack", stack);
+//        console.log("cardStack", stack);
         var attackCard;
         var attacker;
         var defendCardidx;
@@ -370,20 +373,30 @@ function createPlayer(player){
             if(defendCard.hp <= 0){
                 console.log("defendCard : " + defendCard, "DIE!!!!");
                 defendCard.state = "die";
-//                defender.cardList.splice(parseInt(defendCardidx),1);
+                defender.cardList.splice(parseInt(defendCardidx),1);
 //                if(defender.cardList.length <= 0){
 //                    return;
 //                }
+                if(GameConfigure.gamePlayer1.cardList.length <= 0){
+                    alert("P2 WIN!!!");
+                    $("#btn_continue").attr("disabled", "disabled");
+                    return;
+                }
+                else if(GameConfigure.gamePlayer2.cardList.length <= 0){
+                    alert("P1 WIN!!!");
+                    $("#btn_continue").attr("disabled", "disabled");
+                    return;
+                }
             }
 
             var l1 = GameConfigure.gamePlayer1.cardList;
             var l2 = GameConfigure.gamePlayer2.cardList;
-            for(var i =0;i<l1.length;i++){
-                console.log(l1[i].entryNum, l1[i].state);
-            }
-            for(var i =0;i<l2.length;i++){
-                console.log(l2[i].entryNum, l2[i].state);
-            }
+//            for(var i =0;i<l1.length;i++){
+//                console.log(l1[i].entryNum, l1[i].state);
+//            }
+//            for(var i =0;i<l2.length;i++){
+//                console.log(l2[i].entryNum, l2[i].state);
+//            }
             cardBattle2(stack);
         });
     }
