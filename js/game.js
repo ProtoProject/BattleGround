@@ -113,7 +113,7 @@ var skillFunc = function(player){
 
 var Animation_Entity;
 
-require(['jquery', 'card', 'animation', "lib/class", "lib/underscore.min"], function($, Card, Animation){
+require(['jquery', 'card', 'animation', "lib/class", "lib/util", "lib/underscore.min"], function($, Card, Animation){
 /**
  * 플레이어 객체
  * @param playerConf
