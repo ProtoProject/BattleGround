@@ -254,6 +254,7 @@ function createPlayer(player){
 
 //    while(p1Cards.length > 0 || p2Cards.length > 0){
         $("#btn_continue").click(function(){
+            $("#div_skill").find("select").attr("disabled", "disabled");
             /**
              * TODO 장군컨트롤 추가
              */
@@ -323,6 +324,7 @@ function createPlayer(player){
     })();
 
     function cardBattle2(stack){
+        console.log("cardBattle2 START");
 //        console.log("cardStack", stack);
         var attackCard;
         var attacker;
@@ -333,7 +335,10 @@ function createPlayer(player){
         attackCard = null;
         while(!attackCard){
             attackCard = stack.pop();
-            if(!attackCard) return;
+            if(!attackCard){
+                $("#div_skill").find("select").removeAttr("disabled");
+                return;
+            }
             if(attackCard.hp <= 0){
                 attackCard = null;
             }
@@ -349,6 +354,7 @@ function createPlayer(player){
         attackCard.state = "attack";
         defendCard.state = "attacked";
         Animation_Entity.attackTo(makeCardObjForAnimation(attackCard), makeCardObjForAnimation(defendCard), function(){
+            console.log("CALL BACK");
             attackCard.state = "idle";
             defendCard.state = "idle";
 
@@ -370,6 +376,7 @@ function createPlayer(player){
             }
             cardBattle2(stack);
         });
+        console.log("cardBattle2 END");
     };
 
     function makeCardObjForAnimation(cardObj){
@@ -387,5 +394,5 @@ function createPlayer(player){
                 return cardObj.maxHp;
             }
         }
-    }
+    };
 });
